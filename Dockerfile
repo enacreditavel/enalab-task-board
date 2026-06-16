@@ -2,6 +2,7 @@
 FROM gradle:8.5-jdk21 AS build
 WORKDIR /home/gradle/src
 COPY --chown=gradle:gradle . .
+RUN chmod +x ./gradlew
 RUN ./gradlew build bootJar -x test --no-daemon
 
 # Package stage
