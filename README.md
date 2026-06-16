@@ -29,10 +29,9 @@ Alguns conceitos e padrões aplicados:
 
 ## 📖 Documentação
 
-As operações de sistema e as APIs estão sendo desenvolvidas de forma iterativa.
-Para acompanhar o progresso das implementações (operações CRUD) do módulo principal (`tasking`), consulte o arquivo [CRUD_OPERATIONS.md](CRUD_OPERATIONS.md) na raiz do projeto.
+A documentação da API REST pode ser acessada via **[Swagger UI](http://localhost:8080/swagger-ui/index.html)** (fornecido pelo SpringDoc OpenAPI) quando a aplicação estiver em execução.
 
-A documentação da API REST pode ser acessada via **Swagger UI** (fornecido pelo SpringDoc OpenAPI) quando a aplicação estiver em execução.
+
 
 ## ⚙️ Como Executar
 
