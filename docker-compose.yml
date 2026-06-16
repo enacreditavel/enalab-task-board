@@ -15,33 +15,33 @@ services:
     ports:
       - '6379:6379'
 
-#  app-etb:
-#    build: .
-#    ports:
-#      - "8080:8080"
-#      - "5005:5005"
-#    depends_on:
-#      db-etb-mysql:
-#        condition: service_healthy
-#
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:mysql://db-etb-mysql:3306/enalab_task_board
-#      - SPRING_DATASOURCE_USERNAME=root
-#      - SPRING_DATASOURCE_PASSWORD=12345
-#      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
-#    restart: on-failure
+  app-etb:
+    build: .
+    ports:
+      - "8080:8080"
+      - "5005:5005"
+    depends_on:
+      db-etb-mysql:
+        condition: service_healthy
 
-#  db-etb-mysql:
-#    image: mysql:latest
-#    container_name: db-etb-mysql
-#    ports:
-#      - "3307:3306"
-#    environment:
-#      - MYSQL_DATABASE=enalab_task_board
-#      - MYSQL_ROOT_PASSWORD=12345
-#
-#    healthcheck:
-#      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p12345"]
-#      interval: 10s
-#      timeout: 5s
-#      retries: 5
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-etb-mysql:3306/enalab_task_board
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    restart: on-failure
+
+  db-etb-mysql:
+    image: mysql:latest
+    container_name: db-etb-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      - MYSQL_DATABASE=enalab_task_board
+      - MYSQL_ROOT_PASSWORD=12345
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p12345"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
