@@ -1,7 +1,7 @@
-package com.enalab.board.auth.infrastructure.secutiry.jwt;
+package com.enalab.board.auth.infrastructure.security.jwt;
 
-import com.enalab.board.auth.infrastructure.secutiry.CustomUserDetails;
-import com.enalab.board.auth.infrastructure.secutiry.CustomUserDetailsService;
+import com.enalab.board.auth.infrastructure.security.CustomUserDetails;
+import com.enalab.board.auth.infrastructure.security.CustomUserDetailsService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,10 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -21,7 +19,6 @@ import java.io.IOException;
 
 @Slf4j
 @RequiredArgsConstructor
-@Component
 public class JwtRequestFilter extends OncePerRequestFilter {
     private final CustomUserDetailsService customUserDetailsService;
     private final JwtUtil jwtUtil;
@@ -38,8 +35,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         try {
             if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//                log.error(authorizationHeader);
                 jwt = authorizationHeader.split(" ")[1];
                 username = jwtUtil.extractUsername(jwt);
+            } else if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
+//                log.error(authorizationHeader);
+                SecurityContextHolder.clearContext();
+                chain.doFilter(request, response);
+                return;
             }
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {

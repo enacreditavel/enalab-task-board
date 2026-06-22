@@ -1,6 +1,5 @@
-package com.enalab.board.auth.infrastructure.secutiry;
+package com.enalab.board.auth.infrastructure.security;
 
-import com.enalab.board.auth.domain.User;
 import com.enalab.board.auth.domain.UserRepository;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +18,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public CustomUserDetails loadUserByUsername(@NonNull String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        CustomUserDetails userDetails = CustomUserDetails.from(user);
-        return userDetails;
+        return CustomUserDetails.from(userRepository.findByUsername(username));
     }
 }

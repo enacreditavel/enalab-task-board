@@ -1,4 +1,4 @@
-package com.enalab.board.auth.infrastructure.exception;
+package com.enalab.board.common.exceptions;
 
 public class FiguringItOutException extends RuntimeException {
     public FiguringItOutException(String message) {

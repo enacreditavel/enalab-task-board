@@ -1,13 +1,12 @@
-package com.enalab.board.auth.infrastructure.secutiry;
+package com.enalab.board.auth.infrastructure.security;
 
-import com.enalab.board.auth.domain.*;
-import com.enalab.board.auth.infrastructure.secutiry.jwt.JwtRequestFilter;
+import com.enalab.board.auth.infrastructure.security.jwt.JwtRequestFilter;
+import com.enalab.board.auth.infrastructure.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -18,8 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
-import java.time.Instant;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @RequiredArgsConstructor
 @EnableWebSecurity
@@ -29,6 +27,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http,
+                                                   @Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver,
                                                    CustomUsernamePasswordAuthenticationFilter customUsernamePasswordAuthenticationFilter,
                                                    JwtRequestFilter jwtRequestFilter) throws Exception {
         http
@@ -42,6 +41,15 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(customUsernamePasswordAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+
+                .exceptionHandling(exceptions -> exceptions
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            exceptionResolver.resolveException(request, response, null, authException);
+                        })
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            exceptionResolver.resolveException(request, response, null, accessDeniedException);
+                        })
+                )
         ;
 
         return http.build();
@@ -50,6 +58,11 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public JwtRequestFilter jwtRequestFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+        return new JwtRequestFilter(userDetailsService, jwtUtil);
     }
 
     @Bean

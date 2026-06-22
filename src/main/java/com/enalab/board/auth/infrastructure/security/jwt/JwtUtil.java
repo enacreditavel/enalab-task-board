@@ -1,9 +1,8 @@
-package com.enalab.board.auth.infrastructure.secutiry.jwt;
+package com.enalab.board.auth.infrastructure.security.jwt;
 
-import com.enalab.board.auth.infrastructure.secutiry.CustomUserDetails;
+import com.enalab.board.auth.infrastructure.security.CustomUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,7 +89,7 @@ public class JwtUtil {
 
     public Boolean validateToken(String token, CustomUserDetails userDetails) {
         final String username = extractUsername(token);
-        log.info("Validating token");
+//        log.info("Validating token");
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

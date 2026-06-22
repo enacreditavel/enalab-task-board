@@ -1,6 +1,5 @@
-package com.enalab.board.auth.infrastructure.secutiry;
+package com.enalab.board.auth.infrastructure.security;
 
-import com.enalab.board.auth.domain.Permission;
 import com.enalab.board.auth.domain.Profile;
 import com.enalab.board.auth.domain.User;
 import lombok.Builder;
