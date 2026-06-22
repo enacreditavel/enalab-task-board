@@ -2,7 +2,7 @@ package com.enalab.board.auth.application.permission;
 
 import com.enalab.board.auth.domain.PermissionId;
 import com.enalab.board.auth.domain.PermissionRepository;
-import com.enalab.board.auth.infrastructure.exception.PermissionNotFoundException;
+import com.enalab.board.common.exceptions.ResourceNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class DeletePermissionUseCase {
 
     public void execute(String permissionId){
         if (!permissionRepository.existsById(PermissionId.generate(permissionId))){
-            throw new PermissionNotFoundException(permissionId);
+            throw new ResourceNotFoundException("Permission not found with id: "+permissionId);
         }
         permissionRepository.deleteById(PermissionId.generate(permissionId));
     }

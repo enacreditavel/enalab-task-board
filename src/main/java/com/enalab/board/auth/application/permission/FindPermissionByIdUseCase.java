@@ -1,22 +1,18 @@
 package com.enalab.board.auth.application.permission;
 
 import com.enalab.board.auth.application.permission.output.PermissionOutput;
+import com.enalab.board.auth.domain.PermissionId;
 import com.enalab.board.auth.domain.PermissionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @RequiredArgsConstructor
 @Service
-public class FindAllPermissionsUseCase {
+public class FindPermissionByIdUseCase {
     private final PermissionRepository permissionRepository;
-
     @Transactional(readOnly = true)
-    public List<PermissionOutput> execute() {
-        return permissionRepository.findAll().stream()
-                .map(PermissionOutput::from)
-                .toList();
+    public PermissionOutput execute(String permissionId){
+        return PermissionOutput.from(permissionRepository.findById(PermissionId.generate(permissionId)));
     }
 }
